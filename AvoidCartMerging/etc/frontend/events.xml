@@ -8,6 +8,6 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="sales_quote_merge_before">
-        <observer name="magecloud_sales_quote_merge_before" instance="MageCloud\Checkout\Observer\SalesQuoteMergeBefore"/>
+        <observer name="magecloud_sales_quote_merge_before" instance="MageCloud\AvoidCartMerging\Observer\SalesQuoteMergeBefore"/>
     </event>
 </config>
