@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2019. All rights reserved.
+  ~ @author: Sviatoslav Lashkiv
+  ~ @mail:   ss.lashkiv@gmail.com
+  ~ @github: https://github.com/sviatoslav-lashkiv
+  -->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="sales_quote_merge_before">
+        <observer name="magecloud_sales_quote_merge_before" instance="MageCloud\Checkout\Observer\SalesQuoteMergeBefore"/>
+    </event>
+</config>
