@@ -70,35 +70,35 @@ class SalesQuoteMergeBefore implements \Magento\Framework\Event\ObserverInterfac
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         try {
-            $this->logger->info('check SalesQuoteMergeBefore');
-
+            // Admin -> Stores -> Configurations -> Sales -> Checkout -> Shopping Cart -> Avoid merging cart after login
             $moduleEnabled = $this->scopeConfig->isSetFlag(
                 'checkout/cart/avoid_cart_merging_status',
                 \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES
             );
 
+            // Admin -> Stores -> Configurations -> Sales -> Checkout -> Shopping Cart -> Allowed login pages to skip cart merging
             $allowedPages = explode(',', $this->scopeConfig->getValue(
                 'checkout/cart/avoid_cart_merging_allowed_pages',
                 \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITES
             ));
 
+
+            // Checking if the module is enabled and the allowed pages are selected.
             if ($moduleEnabled && isset($allowedPages) && count($allowedPages) > 0) {
 
                 $controllerName = $this->getControllerName();
-                if (!empty($controllerName) && in_array($this->getControllerName(), $allowedPages)) {
-                    if ($observer->getSource()->hasItems()) {
-                        //$currentQuote = $observer->getSource();
 
-                        if (is_object($observer->getQuote()) && $observer->getQuote()->getId()) {
-                            $this->logger->info('SalesQuoteMergeBefore | remove all items');
-                            $observer->getQuote()->removeAllItems();
-                        }
+                // Checking if current controller name exist in the allowed pages list
+                if (!empty($controllerName) && in_array($this->getControllerName(), $allowedPages)) {
+
+                    // Checking if customer has items in previous cart quote
+                    if ($observer->getSource()->hasItems() && is_object($observer->getQuote()) && $observer->getQuote()->hasItems()) {
+                        $observer->getQuote()->removeAllItems();
                     }
+
                 }
             }
 
-            $this->logger->info('SalesQuoteMergeBefore | current quoteId: ' . $observer->getSource()->getId() . ' | items count: ' . count($observer->getSource()->getAllVisibleItems()));
-            $this->logger->info('SalesQuoteMergeBefore | old quoteId: ' . $observer->getQuote()->getId() . ' | items count: ' . count($observer->getQuote()->getAllVisibleItems()));
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
         }
